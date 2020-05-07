@@ -133,6 +133,7 @@ def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    #if computer starts, make random move, probably best to choose center
     if board == initial_state():
         x = random.choice([0,1,2])
         y = random.choice([0,1,2])
@@ -144,8 +145,11 @@ def minimax(board):
     mov = actions(board)[0]
     start = time.clock()
     if p == X:
+        v = -math.inf
         for action in actions(board):
-            v = max_value(result(board,action), 0)
+            v = max_value(result(board,action), v)
+            if v == 1:
+                return action
             if v >= m:
                 m = v
                 mov = action 
@@ -154,8 +158,11 @@ def minimax(board):
         return mov
         
     else:
+        v = math.inf
         for action in actions(board):
-            v = min_value(result(board,action), 0)
+            v = min_value(result(board,action), v)
+            if v == -1:
+                return action
             if v <= m:
                 m = v
                 mov = action 
@@ -169,6 +176,7 @@ def max_value(board,level):
     if terminal(board):
         return utility(board)
     if level == 999:
+        print("level reached")
         return 0
     v = - math.inf
     for action in actions(board):
